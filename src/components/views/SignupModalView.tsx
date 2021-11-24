@@ -1,8 +1,8 @@
 import { Button, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { LoginForm } from "components/forms/LoginForm";
+import { SignupForm } from "components/forms/SignupForm";
 
-export const LoginModalView = (): JSX.Element => {
+export const SignupModalView = (): JSX.Element => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -18,23 +18,22 @@ export const LoginModalView = (): JSX.Element => {
 
   return (
     <>
-      <Button className={"mr-2"} variant="primary" onClick={handleShow}>
-        Login
+      <Button variant="primary" onClick={handleShow}>
+        Signup
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Login</Modal.Title>
+          <Modal.Title>Signup</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LoginForm onSuccess={handleClose} />
-          <div>Don't have an account? register now.</div>
+          <SignupForm onSuccess={handleClose} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" type="submit" form="login-form">
-            Login
+          <Button variant="primary" type="submit" form="signup-form">
+            Signup
           </Button>
         </Modal.Footer>
       </Modal>

@@ -1,8 +1,16 @@
-import { Container, Nav, Navbar, NavItem } from "react-bootstrap";
+import {
+  ButtonGroup,
+  ButtonToolbar,
+  Container,
+  Nav,
+  Navbar,
+  NavItem,
+} from "react-bootstrap";
 import React, { useContext } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Autocomplete } from "components/search/Autocomplete";
 import { LoginModalView } from "components/views/LoginModalView";
+import { SignupModalView } from "components/views/SignupModalView";
 import { UserContext } from "App";
 import { LogoutButton } from "components/forms/LogoutButton";
 
@@ -46,7 +54,14 @@ export const AppLayout = ({ children }: AppLayoutProps): JSX.Element => {
                 {userContext.user ? (
                   <LogoutButton label={"Logout"} />
                 ) : (
-                  <LoginModalView />
+                  <ButtonToolbar aria-label="user actions">
+                    <ButtonGroup className="me-2" aria-label="login">
+                      <LoginModalView />
+                    </ButtonGroup>
+                    <ButtonGroup className="me-2" aria-label="signup">
+                      <SignupModalView />
+                    </ButtonGroup>
+                  </ButtonToolbar>
                 )}
               </NavItem>
             </Nav>
