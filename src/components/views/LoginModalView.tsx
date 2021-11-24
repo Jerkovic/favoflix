@@ -1,12 +1,20 @@
 import { Button, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LoginForm } from "components/forms/LoginForm";
 
 export const LoginModalView = (): JSX.Element => {
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    return () => {
+      console.log("unsub");
+    };
+  }, []);
 
   return (
     <>

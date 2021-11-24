@@ -54,31 +54,39 @@ export interface Movie {
 
 export const useMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const q = query(
       collection(db, "movies"),
       orderBy("year", "desc"),
-      limit(8)
+      limit(16)
     );
-    const unsubscribe = onSnapshot(q, (moviesSnapshot) => {
-      setMovies(
-        moviesSnapshot.docs.map(
-          (doc) =>
-            ({
-              id: doc.id,
-              title: doc.data().title,
-              plot: doc.data().plot,
-              poster: doc.data().poster,
-            } as Movie)
-        )
-      );
-    });
+    const unsubscribe = onSnapshot(
+      q,
+      (moviesSnapshot) => {
+        setMovies(
+          moviesSnapshot.docs.map(
+            (doc) =>
+              ({
+                id: doc.id,
+                title: doc.data().title,
+                plot: doc.data().plot,
+                poster: doc.data().poster,
+              } as Movie)
+          )
+        );
+      },
+      (error) => {
+        console.error("Error occurred fetching movies: " + error.message);
+        setError("Error loading movies");
+      }
+    );
     return () => {
       unsubscribe();
     };
   }, []);
-  return movies;
+  return { movies, error };
 };
 
 /**
