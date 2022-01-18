@@ -1,5 +1,6 @@
 require("dotenv").config();
 const admin = require("firebase-admin");
+const algoliasearch = require("algoliasearch");
 
 const serviceAccount = require("./serviceAccount.json");
 const movies = require("./data/suggestions.json");
@@ -20,6 +21,14 @@ admin.initializeApp({
   databaseURL: process.env.FIRESTORE_EMULATOR_HOST,
 });
 
+// for clearing Algolia Index we need the Admin key
+const algoliaClient = algoliasearch(
+  process.env.ALGOLIA_APP_ID,
+  process.env.ALGOLIA_ADMIN
+);
+
+const moviesIndex = algoliaClient.initIndex("movies");
+
 const db = admin.firestore();
 const moviesBatch = db.batch();
 const moviesRef = db.collection("suggestions");
@@ -30,7 +39,17 @@ movies.map((t) => {
   return true;
 });
 
-moviesBatch.commit().then(() => {
-  process.exit(-1);
-  console.log("\x1b[32m", "Added movie suggestions!");
-});
+const RefreshData = async () => {
+  try {
+    await moviesIndex.clearObjects().wait();
+    console.log("cleared algolia index");
+
+    await moviesBatch.commit();
+    console.log("\x1b[32m", "Added movie suggestions!");
+    process.exit(-1);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+RefreshData().then();
