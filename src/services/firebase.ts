@@ -28,16 +28,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
-connectFirestoreEmulator(db, "localhost", 8080);
 
 const functions = getFunctions(app);
-connectFunctionsEmulator(functions, "localhost", 5002);
 
 export const storage = getStorage(app);
-connectStorageEmulator(storage, "localhost", 9199);
 
 export const auth = getAuth(app);
-connectAuthEmulator(auth, "http://localhost:5001");
+
+if ((process.env.REACT_APP_ENVIRONMENT as string) === "local") {
+  connectFirestoreEmulator(db, "localhost", 8080);
+  connectFunctionsEmulator(functions, "localhost", 5002);
+  connectStorageEmulator(storage, "localhost", 9199);
+  connectAuthEmulator(auth, "http://localhost:5001");
+}
 
 export interface Movie {
   id: string;
