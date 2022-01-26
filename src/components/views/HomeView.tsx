@@ -8,6 +8,7 @@ export const HomeView = (): JSX.Element => {
 
   return (
     <>
+      <h1>Welcome!</h1>
       {error && (
         <Alert key={"alert-login-error"} variant={"danger"}>
           {error}

@@ -9,5 +9,10 @@ service cloud.firestore {
       allow read: if false;
       allow write: if isSignedIn();
     }
+
+    match /movies/{movie} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
   }
 }
